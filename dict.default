@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python PATH/dict.py "$1"
+python PATH "$1"
