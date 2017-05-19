@@ -8,3 +8,8 @@ Go to https://developer.oxforddictionaries.com to register Oxford application
 ```
 ./setup
 ```
+
+## Use
+```
+dict Hello
+```
