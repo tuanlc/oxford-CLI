@@ -1,2 +1,10 @@
 # Oxford-Dictionary-Commandline
-A command line app about Oxford dictionary
+A command line application about Oxford dictionary
+
+## Install
+### Prepare
+Go to https://developer.oxforddictionaries.com to register Oxford application
+### Setup
+```
+./setup
+```

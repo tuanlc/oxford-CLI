@@ -1,0 +1,19 @@
+#!/bin/bash
+
+cp dict.default dict
+cp dict.py.default dict.py
+
+projectPath=`pwd`
+sed -i 's?PATH?'`pwd`'?' dict
+
+echo Go to https://developer.oxforddictionaries.com to register Oxford application
+echo -n "Enter APP ID > "
+read appId
+echo -n "Enter APP Key > "
+read appKey
+
+sed -i s/"oxford-app-id"/$appId/g dict.py
+sed -i s/"oxford-app-key"/$appKey/g dict.py
+
+echo "Move dict to /usr/bin"
+sudo cp dict /usr/bin/
