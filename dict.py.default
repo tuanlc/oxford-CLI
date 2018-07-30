@@ -11,6 +11,38 @@ app_key = 'oxford-app-key'
 language = 'en'
 word_id = sys.argv[1]
 
+# Function to get the definition of a word
+def getPronunciation(lexicalEntry):
+    # we will default to nothing
+    default = 'N/A';
+
+    # First try to get it from here. It isn't always here, so we will wrap it in
+    # a try so that this won't catastrophically fail
+    try:
+        return lexicalEntry['pronunciations'][0]['phoneticSpelling']
+    except:
+        # If we don't find it here, that is fine. We will look somewhere else.
+        pass
+
+    # Try to get the entries
+    try:
+        entries = lexicalEntry['entries']
+    except:
+        # If this fails then return the default
+        return default
+
+    # Loop through all entries, and checck to see if the pronunciation exists
+    # there. if not pass on to the next entry
+    for entry in entries:
+        try:
+            return entry['pronunciations'][0]['phoneticSpelling']
+        except:
+            pass
+
+    # if no entries found it then return the default
+    return default;
+
+
 try:
     url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/' + language + '/' + word_id.lower()
     r = requests.get(url, headers = {'app_id': app_id, 'app_key': app_key})
@@ -21,11 +53,11 @@ try:
         lexicalEntries = result['lexicalEntries']
         lexicalEntriesStr = ''
 
-        for lexicalEntrie in lexicalEntries:
-            entries = lexicalEntrie['entries']
-            lexicalCategoryStr = 'Lexical category: ' + lexicalEntrie['lexicalCategory'] + '\n'
-            pronunciationsStr = 'Pronunciations: ' + lexicalEntrie['pronunciations'][0]['phoneticSpelling'] + '\n'
-            textStr = 'Text: ' + lexicalEntrie['text'] + '\n'
+        for lexicalEntry in lexicalEntries:
+            entries = lexicalEntry['entries']
+            lexicalCategoryStr = 'Lexical category: ' + lexicalEntry['lexicalCategory'] + '\n'
+            pronunciationsStr = 'Pronunciations: ' + getPronunciation(lexicalEntry) + '\n'
+            textStr = 'Text: ' + lexicalEntry['text'] + '\n'
 
             lexicalEntrieStr = '--------------------------------------------------------\n'
             lexicalEntrieStr = lexicalEntrieStr + textStr + pronunciationsStr + lexicalCategoryStr + '\n';
@@ -56,6 +88,6 @@ try:
 
     print(resultStr)
 except (KeyboardInterrupt, SystemExit):
-    print('Opp! Search progressing is canceled!')
+    print('Opp! Search progressing is cancelled!')
 except:
     print('Opp! No results')
