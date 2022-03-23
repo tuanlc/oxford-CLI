@@ -19,5 +19,14 @@ read appKey
 sed -i s/"oxford-app-id"/$appId/g $dictFile
 sed -i s/"oxford-app-key"/$appKey/g $dictFile
 
-echo "Move dict to /usr/bin"
-sudo cp dict /usr/bin/
+echo "Move dict to /usr/local/bin"
+
+# Use su if sudo isn't installed
+root=sudo
+$root --version &> /dev/null || root=su
+
+case $root in
+  sudo) sudo cp dict /usr/local/bin/ ;;
+  su) su -c "cp dict /usr/local/bin/" ;;
+esac
+
